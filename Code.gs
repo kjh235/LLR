@@ -64,9 +64,44 @@ function oldBlessInvoices()
     Logger.log(emlbody);
   }
 }
+function get_COGS_info(){
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var newData = ss.getSheetByName ("StyleCOGS");
+  
+  newData.getRange('A2:B2').activate();
+  //var currentCell = spreadsheet.getCurrentCell();
+  //spreadsheet.getSelection().getNextDataRange(SpreadsheetApp.Direction.DOWN).activate();
+  //currentCell.activateAsCurrentCell();
+  
+  var calRange = newData.getSelection().getNextDataRange(SpreadsheetApp.Direction.DOWN).getValues();
+  newData = ss.getSheetByName ("Invoices");
+  newData.activate();
+  return calRange;
+
+}
 
 
-
+function COGS_function(emlbody, COGS_info){
+  var tmpCOGS=0;
+  var tmpitems = 0;
+  var xxx = emlbody;
+  var COGS = COGS_info;
+  for (var i=0;i<COGS.length;i++)
+  {
+    var yyy = COGS[i][0];
+    var rgxp = new RegExp(yyy, "g");
+    var items = xxx.match(rgxp) ? xxx.match(rgxp).length : 0;
+    tmpitems += items;
+    tmpCOGS += items * COGS[i][1];
+  }    
+  Logger.log([tmpCOGS, tmpitems]);
+  return [tmpCOGS, tmpitems];
+}
+function testCOGS(){
+  var unreads = "Iris S  $32.00 O/S  $25.00";
+  var cg = COGS_function(unreads,get_COGS_info());
+  Logger.log(cg);
+}
 
 function OrderDeets(emlbody){
   
@@ -276,18 +311,89 @@ tmp = emlbody.match(/Gracie\s/g) ;
   tmp = emlbody.match(/Jane\s/g) ;
   var jane =  tmp ? tmp.length : 0;
   
+  //morgan,chloe,riley,olive,summer,tenacious,brave,fearless,strong,confident,invincible,savannah
+  // 17,24,22,17,20,18,26,25,16,17,16,21
   
-  //25,25,37,26
- //ivy,avery,noelle,xoe
+  tmp = emlbody.match(/Morgan\s/g) ;
+  var morgan =  tmp ? tmp.length : 0;
+  tmp = emlbody.match(/Chloe\s/g) ;
+  var chloe =  tmp ? tmp.length : 0;
+  tmp = emlbody.match(/Riley\s/g) ;
+  var riley =  tmp ? tmp.length : 0;
+  tmp = emlbody.match(/Olive\s/g) ;
+  var olive =  tmp ? tmp.length : 0;
+  tmp = emlbody.match(/Summer\s/g) ;
+  var summer =  tmp ? tmp.length : 0;
+  tmp = emlbody.match(/Fearless\s/g) ;
+  var fearless =  tmp ? tmp.length : 0;
+  tmp = emlbody.match(/Tenacious\s/g) ;
+  var tenacious =  tmp ? tmp.length : 0;
+  tmp = emlbody.match(/Brave\s/g) ;
+  var brave =  tmp ? tmp.length : 0;
+  tmp = emlbody.match(/Strong\s/g) ;
+  var strong =  tmp ? tmp.length : 0;
+  tmp = emlbody.match(/Confident\s/g) ;
+  var confident =  tmp ? tmp.length : 0;
+  tmp = emlbody.match(/Invincible\s/g) ;
+  var invincible =  tmp ? tmp.length : 0;
+  tmp = emlbody.match(/Savannah\s/g) ;
+  var savannah =  tmp ? tmp.length : 0;
+  tmp = emlbody.match(/Melissa\s/g) ;
+  var melissa =  tmp ? tmp.length : 0;
+  
+  tmp = emlbody.match(/Charlie\s/g) ;
+  var charlie =  tmp ? tmp.length : 0;
+  tmp = emlbody.match(/Kristina\s/g) ;
+  var kristina =  tmp ? tmp.length : 0;
+  
+  tmp = emlbody.match(/Shorts\s/g) ;
+  var shorts =  tmp ? tmp.length : 0;
+  tmp = emlbody.match(/Devin\s/g) ;
+  var devin =  tmp ? tmp.length : 0;
+  tmp = emlbody.match(/Boyfriend\s/g) ;
+  var boyfriend =  tmp ? tmp.length : 0;
+  tmp = emlbody.match(/Kristina\s/g) ;
+  var kristina =  tmp ? tmp.length : 0;
+  tmp = emlbody.match(/Marsha\s/g) ;
+  var marsha =  tmp ? tmp.length : 0;
+  tmp = emlbody.match(/Olivia\s/g) ;
+  var olivia =  tmp ? tmp.length : 0;
+   tmp = emlbody.match(/Poppy\s/g) ;
+  var poppy =  tmp ? tmp.length : 0;
+   tmp = emlbody.match(/Dahl\s/g) ;
+  var dahl =  tmp ? tmp.length : 0;
+   tmp = emlbody.match(/Macy\s/g) ;
+  var macy =  tmp ? tmp.length : 0; 
+  tmp = emlbody.match(/Debra\s/g) ;
+  var debra =  tmp ? tmp.length : 0;
+  tmp = emlbody.match(/Jana\s/g) ;
+  var jana =  tmp ? tmp.length : 0;
+  tmp = emlbody.match(/Ryane\s/g) ;
+  var ryane =  tmp ? tmp.length : 0;
+  
+  tmp = emlbody.match(/Gabby\s/g) ;
+  var gabby =  tmp ? tmp.length : 0;
+  tmp = emlbody.match(/Crystal\s/g) ;
+  var crystal =  tmp ? tmp.length : 0;
+  tmp = emlbody.match(/Mackenzie\s/g) ;
+  var mackenz =  tmp ? tmp.length : 0;
+  tmp = emlbody.match(/Kate\s/g) ;
+  var kate =  tmp ? tmp.length : 0;
+    tmp = emlbody.match(/Bethany\s/g) ;
+  var bethany =  tmp ? tmp.length : 0;
+  
+  //,17,22,26,17
+ //,gabby,crystal, mackenz, kate
   //var DisleggingsTC = emlbody.match(/Mimi Tops/g);
   //var leggingsOS = emlbody.match(/Disney Leggings Leggings TC/g);
-  var OrdrPcs = [leggingsOS+blklgsOS+vdayleggingsOS, lynnae,cassie-elgCassie, sarah-elgSarah,carly-elgCarly,classic-Disclassic,DisleggingsLXL,randy-Disrandy,joy,perfect+ptank,madison,leggingsTC+blklgsTC+vdayleggingsTC,julia,lindsay,maxi,Disrandy,irma-Disirma,DisleggingsTC,DisleggingsOS,leggingsTC2+blklgsTC2+vdayleggingsTC2,DisleggingsSM,amelia,DisleggingsTween,azure,monroe, nicole,lola,shirley-elgShirley,mimi,Disirma, Disclassic,leggingsSM+leggingsXL+vdayleggingsSM+vdayleggingsXL,leggingsTW+vdayleggingsTW,elgDebbie,elgShirley,elgCarly,elgDeanne,elgCassie,elgSarah,jaxon+harvey,maria,maurine,debbie,jane,cici,tank,christy,dani,grga,carol,jessie,marly,mae+adeline+sariah+scarlett+gracie,nikki,amber,gigi,valentina,hudson,lucille,denim,mitzi,mimi,ellie,liv,michelle,jax,emily,iris,hudsonLS,teddy,ivy,avery,noelle,xoe,eliz,mark,jane];
+  var OrdrPcs = [leggingsOS+blklgsOS+vdayleggingsOS, lynnae,cassie-elgCassie, sarah-elgSarah,carly-elgCarly,classic-Disclassic,DisleggingsLXL,randy-Disrandy,joy,perfect+ptank,madison,leggingsTC+blklgsTC+vdayleggingsTC,julia,lindsay,maxi,Disrandy,irma-Disirma,DisleggingsTC,DisleggingsOS,leggingsTC2+blklgsTC2+vdayleggingsTC2,DisleggingsSM,amelia,DisleggingsTween,azure,monroe, nicole,lola,shirley-elgShirley,mimi,Disirma, Disclassic,leggingsSM+leggingsXL+vdayleggingsSM+vdayleggingsXL,leggingsTW+vdayleggingsTW,elgDebbie,elgShirley,elgCarly,elgDeanne,elgCassie,elgSarah,jaxon+harvey,maria,maurine,debbie,jane,cici,tank,christy,dani,grga,carol,jessie,marly,mae+adeline+sariah+scarlett+gracie,nikki,amber,gigi,valentina,hudson,lucille,denim,mitzi,mimi,ellie,liv,michelle,jax,emily,iris,hudsonLS,teddy,ivy,avery,noelle,xoe,eliz,mark,jane,morgan,chloe,riley,olive,summer,tenacious,brave,fearless,strong,confident,invincible,savannah,melissa,charlie,kristina,shorts,devin,boyfriend,marsha,olivia,poppy,dahl,macy,debra,jana,ryane,gabby,crystal, mackenz, kate, bethany];
   //Logger.log(OrdrPcs);
-  var WSprices = [10.5,18,14,30,25,16,10,16,25,17,23,10.5,18,21,21,21,15,12.5,12.5,12,10,31,11,14,10.5,23,21,22,34,22,20,8.5,9.5,25,25,39,70,20,42,50,34,36,24,24,35,12.5,17,27.5,32.5,27,25,25,5,23,21,15,22,17,30,35,17,30,26,17,24,26,25,16,19,26,25,25,37,26,18,20,22];
+  var WSprices = [10.5,18,14,30,25,16,10,16,25,17,23,10.5,18,21,21,21,15,12.5,12.5,12,10,31,11,14,10.5,23,21,22,34,22,20,8.5,9.5,25,25,39,70,20,42,50,34,36,24,24,35,12.5,17,27.5,32.5,27,25,25,5,23,21,15,22,17,30,35,17,30,26,17,24,26,25,16,19,26,25,25,37,26,18,20,22,17,24,22,17,20,18,26,25,16,17,16,21,17,22,16,29,17,16,21,20,23,16,22,18,17,23,17,22,26,17,22];
   var OrdrCOGS=0;
   var OrdrPcsCnt=0;
   for(var b=0;b<OrdrPcs.length;b++){
     OrdrCOGS=OrdrPcs[b]*WSprices[b]+OrdrCOGS;
+    //OrdrCOGS=COGS_function()
     OrdrPcsCnt=OrdrPcs[b]+OrdrPcsCnt;
   }
   var cogs_cnt = [OrdrCOGS,OrdrPcsCnt];   
@@ -513,10 +619,12 @@ function LogNewBless(invoicesheetID,unreads){
 function dotheworksheet(invoicesheetID){
   // set up Invoices (order summary) formulas
   var PrintStatus = '=iferror(vlookup(R[0]C[-17],Shipments!C[-18]:C[-16],1,false),"Not Printed")';
+  var PrintStatus = '="Not Printed"';
   //var email = '=iferror(vlookup(R[0]C[-15],Emails!C[-16]:C[-15],2,false),"")';
   //var TotalCOGS = '=sumifs(\'MyOrders - New Bless\'!C[-12]:C[-12],\'MyOrders - New Bless\'!C[-17]:C[-17],R[0]C[-16])';
   //var itemsInvcd = '=sumifs(\'MyOrders - New Bless\'!C[-17]:C[-17],\'MyOrders - New Bless\'!C[-19]:C[-19],R[0]C[-18])';
   var ActualShipping = '=iferror(vlookup(R[0]C[-18],Shipments!C[-19]:C[-12],6,false),0)';
+  var ActualShipping = '=0';
   //var ChargedShipping = '=iferror(ARRAYFORMULA(INDEX(\'Order Details\'!C[-17]:C[-9],MATCH(1,(R[0]C[-16]=\'Order Details\'!C[-17]:C[-17])*(\'Order Details\'!C[-14]:C[-14]="na"),0),3)),"Shipping and Handling")';
   var TotalProfit = '=R[0]C[-6]-R[0]C[-7]-R[0]C[-4]-R[0]C[-1]';
   var formulas = [];
@@ -563,7 +671,7 @@ function dotheworksheet(invoicesheetID){
   }
   //export the sheet to csv for import into Stamps.com
   //export the sheet to xlsx for easy manipulation
-  exportSheet(invoicesheetID);
+  //exportSheet(invoicesheetID);
   
 }
 

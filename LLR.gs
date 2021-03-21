@@ -773,7 +773,7 @@ function getOrderSummaryFromMessageNewBless(emailmsg){
   
   var ordr = emailmsg.getBody();
   var emlbody = emailmsg.getPlainBody();
-  Logger.log(emlbody);
+  //Logger.log(emlbody);
   var order_dt = emailmsg.getDate();
   var ThreadNm = emailmsg.getSubject();
   var recipient = emailmsg.getTo();
@@ -828,11 +828,15 @@ function getOrderSummaryFromMessageNewBless(emailmsg){
     
     var ordr_tbl2 = emlbody.substring(dt_indx,notes_indx);
     var ordrsumm_tbl2 = emlbody.substring(ordrsmm,pymt_indx);
-    var cogs_cnt = OrderDeets(ordrsumm_tbl2);
-    
+    //var cogs_cnt = OrderDeets(ordrsumm_tbl2);
+    var cogs_cnt = COGS_function(ordrsumm_tbl2,get_COGS_info());
+    Logger.log(ordrsumm_tbl2);
+    Logger.log(cogs_cnt);
+    Logger.log("TestNext");
+    //Logger.log(cogs_cnt2);
     
     var pymt_indx = emlbody.search("Payment");
-    var subttl_plain = emlbody.search("Subtotal");
+    var subttl_plain = emlbody.search("Items Subtotal");
     var esttax_plain = emlbody.search("Tax");
     var ShpHnd_indx = emlbody.search("S&H"); 
     var ShpHndTax_plain = emlbody.search("S&H Tax");
@@ -842,16 +846,17 @@ function getOrderSummaryFromMessageNewBless(emailmsg){
       x=9;}
     
     
-    var emlbody2 = emlbody.substring(subttl_plain, emlbody.length);
+    var emlbody2 = emlbody.substring(ordrsmm, emlbody.length);
     
     shpname = cust_nm;
-    tmp = ordrsumm_tbl2.match(/Items Subtotal\s*\$(\-*[0-9]*\.[0-9]*)/);
-    var amt_nb = (tmp && tmp[1]) ? tmp[1].trim() : 0;
-    tmp = ordrsumm_tbl2.match(/Order Discount\s*\$(\-*[0-9]*\.[0-9]*)/);
+    tmp = ordrsumm_tbl2.match(/Items\s*Subtotal\s*\$(\-*[0-9]*\.[0-9]*)/);
+    var sub_amt_nb = (tmp && tmp[1]) ? tmp[1].trim() : 0;
+    tmp = ordrsumm_tbl2.match(/Order\s*Discount\s*\-*\$([0-9]*\.[0-9]*)/);
     var disc_nb = (tmp && tmp[1]) ? tmp[1].trim() : 0;
-    tmp = ordrsumm_tbl2.match(/[^Items]\s*Subtotal\s*\$(\-*[0-9]*\.[0-9]*)/);
+    tmp = ordrsumm_tbl2.match(/[^Items]\sSubtotal\s*\$(\-*[0-9]*\.[0-9]*)/);
     var amt_nb = (tmp && tmp[1]) ? tmp[1].trim() : 0;
-    tmp = ordrsumm_tbl2.match(/  Tax\s*\$(\-*[0-9]*\.[0-9]*)/);
+    if(sub_amt_nb == amt_nb && disc_nb != 0){amt_nb=parseFloat(sub_amt_nb)-parseFloat(disc_nb);}
+    tmp = ordrsumm_tbl2.match(/[^H]\s*Tax\s*\$(\-*[0-9]*\.[0-9]*)/);
     var tax_nb = (tmp && tmp[1]) ? tmp[1].trim() : 0;
     tmp = ordrsumm_tbl2.match(/S&H\s*\$(\-*[0-9]*\.[0-9]*)/);
     var sh_nb = (tmp && tmp[1]) ? tmp[1].trim() : 0; 
